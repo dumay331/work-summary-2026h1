@@ -1,0 +1,1563 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="canvas:aspect-ratio" content="16:9" />
+  <title>2026年半年度工作总结 — 瀛之杰</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Seed Tokens (Nudge-controlled) ── */
+    :root {
+      --seed-bg: #f8fafc;
+      --seed-fg: #0f172a;
+      --seed-primary: #1a56db;
+      --seed-accent: #0284c7;
+      --seed-surface: #ffffff;
+      --seed-radius: 10px;
+
+      /* ── Derived Tokens ── */
+      --bg: var(--seed-bg);
+      --fg: var(--seed-fg);
+      --primary: var(--seed-primary);
+      --primary-light: color-mix(in srgb, var(--seed-primary) 12%, transparent);
+      --primary-dark: color-mix(in srgb, var(--seed-primary) 85%, #000);
+      --accent: var(--seed-accent);
+      --accent-light: color-mix(in srgb, var(--seed-accent) 10%, transparent);
+      --surface: var(--seed-surface);
+      --surface-alt: #f0f5ff;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --border-light: #f1f5f9;
+      --success: #059669;
+      --success-light: color-mix(in srgb, var(--success) 10%, transparent);
+      --warning: #d97706;
+      --warning-light: color-mix(in srgb, var(--warning) 10%, transparent);
+      --danger: #dc2626;
+      --danger-light: color-mix(in srgb, var(--danger) 10%, transparent);
+
+      /* ── Typography ── */
+      --font-heading: 'Noto Sans SC', 'Inter', system-ui, sans-serif;
+      --font-body: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+      --font-mono: 'SF Mono', 'Menlo', monospace;
+
+      /* ── Spacing ── */
+      --space-section: 88px;
+      --space-card: 24px;
+      --space-content: max(24px, 5vw);
+
+      /* ── Radius ── */
+      --radius-sm: calc(var(--seed-radius) * 0.6);
+      --radius-md: var(--seed-radius);
+      --radius-lg: calc(var(--seed-radius) * 1.6);
+
+      /* ── Typography Scale ── */
+      --h1-size: clamp(2rem, 4vw, 3rem);
+
+      /* ── Shadows ── */
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.08), 0 4px 8px rgba(15, 23, 42, 0.04);
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--fg);
+      background: var(--bg);
+      font-feature-settings: "kern";
+    }
+
+    /* ── Typography Scale ── */
+    h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 600; line-height: 1.2; }
+    h1 { font-size: var(--h1-size); letter-spacing: -0.02em; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -0.015em; }
+    h3 { font-size: clamp(1.1rem, 1.8vw, 1.25rem); letter-spacing: -0.01em; }
+    p { max-width: 65ch; }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* ── Navigation ── */
+    nav[data-component="Navigation"] {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(248, 250, 252, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    nav[data-component="Navigation"].scrolled {
+      border-bottom-color: var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-content);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--fg);
+      letter-spacing: -0.01em;
+    }
+    .nav-brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-logo {
+      height: 28px;
+      width: auto;
+      flex-shrink: 0;
+    }
+    .nav-links { display: flex; gap: 8px; list-style: none; }
+    .nav-links a {
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      transition: color 0.2s, background 0.2s;
+      font-weight: 500;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    /* ── Hero Section ── */
+    .hero {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 100px var(--space-content) 60px;
+      background: linear-gradient(180deg, #0c1f3f 0%, #132e5b 40%, #1a4080 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-date {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-top: 16px;
+    }
+    .hero h1 {
+      color: #fff;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      margin-bottom: 20px;
+    }
+    .hero-author {
+      font-size: 1.125rem;
+      color: rgba(255,255,255,0.7);
+      font-weight: 400;
+    }
+    .hero-author strong { color: rgba(255,255,255,0.95); font-weight: 600; }
+    .hero-divider {
+      width: 48px; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin: 32px auto;
+    }
+    .hero-stats {
+      display: flex; gap: 48px;
+      justify-content: center;
+      margin-top: 48px;
+      flex-wrap: wrap;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat-value {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 8px;
+      font-weight: 500;
+    }
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.3);
+      animation: float 2s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── Section Base ── */
+    .section {
+      padding: var(--space-section) var(--space-content);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-full {
+      padding: var(--space-section) var(--space-content);
+    }
+    .section-header {
+      margin-bottom: 48px;
+    }
+    .section-header h2 {
+      margin-top: 12px;
+      color: var(--fg);
+    }
+    .section-header p {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    /* ── Wuxin Cards ── */
+    .wuxin-section { background: var(--surface-alt); }
+    .wuxin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: var(--space-card);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .wuxin-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .wuxin-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    .wuxin-card-icon {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+    .wuxin-card-icon svg { width: 20px; height: 20px; }
+    .wuxin-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 4px;
+    }
+    .wuxin-card-subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .wuxin-metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .wuxin-metric:last-child { border-bottom: none; }
+    .wuxin-metric-label {
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+    .wuxin-metric-value {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--fg);
+      font-variant-numeric: tabular-nums;
+    }
+    .wuxin-highlight {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 2px;
+      font-family: var(--font-heading);
+    }
+    .wuxin-highlight-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .wuxin-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 50px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 500;
+      margin-top: 12px;
+    }
+
+    /* ── Unfinished Items ── */
+    .unfinished-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .unfinished-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      transition: box-shadow 0.25s;
+    }
+    .unfinished-item:hover { box-shadow: var(--shadow-md); }
+    .unfinished-col-label {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .unfinished-col-value {
+      font-size: 0.9375rem;
+      color: var(--fg);
+      line-height: 1.5;
+    }
+    .unfinished-item .unfinished-col:first-child .unfinished-col-value {
+      font-weight: 600;
+    }
+    .unfinished-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 50px;
+      margin-top: 8px;
+    }
+    .status-progress {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+    .status-progress::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--warning);
+    }
+
+    /* ── Innovation / Standardization ── */
+    .innovate-section { background: var(--surface); }
+    .innovate-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .innovate-card {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      align-items: start;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .innovate-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .innovate-num {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-sm);
+      background: var(--primary-light);
+      color: var(--primary);
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .innovate-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .innovate-name {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: var(--fg);
+      line-height: 1.3;
+    }
+    .innovate-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .innovate-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .innovate-meta-label {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+    .innovate-meta-text {
+      font-size: 0.875rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+    @media (max-width: 768px) {
+      .innovate-meta { grid-template-columns: 1fr; }
+    }
+
+    /* ── Problems Section ── */
+    .problems-section { background: var(--surface-alt); }
+    .problems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+      gap: var(--space-card);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .problem-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .problem-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .problem-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .problem-number {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .problem-title {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: var(--fg);
+      line-height: 1.3;
+    }
+    .problem-status-tag {
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 50px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .tag-partial { background: var(--warning-light); color: var(--warning); }
+    .tag-forming { background: var(--accent-light); color: var(--accent); }
+    .tag-ongoing { background: var(--primary-light); color: var(--primary); }
+    .tag-no { background: var(--danger-light); color: var(--danger); }
+    .problem-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .problem-detail-row {
+      display: flex;
+      gap: 8px;
+    }
+    .problem-detail-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      min-width: 60px;
+      flex-shrink: 0;
+      font-weight: 500;
+    }
+    .problem-detail-text {
+      font-size: 0.875rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+    .problem-suggestion {
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-light);
+      font-size: 0.875rem;
+      color: var(--primary);
+      line-height: 1.5;
+    }
+    .problem-suggestion strong {
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    /* ── Goal Overview Badges ── */
+    .goal-overview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 1200px;
+      margin: 0 auto 40px;
+    }
+    .goal-overview-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+    .goal-overview-item:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .goal-overview-num {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-family: var(--font-heading);
+      font-size: 0.875rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .goal-overview-text {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--fg);
+      line-height: 1.4;
+    }
+    .goal-overview-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2px;
+      font-weight: 400;
+    }
+    @media (max-width: 768px) {
+      .goal-overview { grid-template-columns: 1fr; }
+    }
+
+    /* ── Plan Section – GAS Tree Layout ── */
+    .goal-tree {
+      max-width: 1200px;
+      margin: 0 auto 56px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .goal-tree-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 32px;
+    }
+    .goal-tree-title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+    /* GAS row: label bar + content */
+    .gas-row {
+      display: flex;
+      align-items: stretch;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .gas-row:last-child { margin-bottom: 0; }
+    .gas-bar {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 10px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-heading);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-width: 40px;
+    }
+    .gas-bar-g {
+      background: #334155;
+      color: #fff;
+    }
+    .gas-bar-s {
+      background: #475569;
+      color: #fff;
+    }
+    .gas-bar-a {
+      background: var(--primary);
+      color: #fff;
+    }
+    .gas-row-content {
+      flex: 1;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    /* G level: single wide box */
+    .gas-box-g {
+      flex: 1;
+      background: #f1f5f9;
+      border-radius: var(--radius-sm);
+      padding: 14px 20px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .gas-box-g .gas-keyword {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    /* S level: multiple boxes */
+    .gas-box-s {
+      flex: 1;
+      min-width: 180px;
+      background: #f1f5f9;
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-size: 0.8125rem;
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      line-height: 1.4;
+    }
+    .gas-box-s .s-label {
+      font-weight: 600;
+      color: var(--primary);
+      margin-right: 6px;
+      flex-shrink: 0;
+    }
+    /* A level: columns of action items */
+    .gas-col-a {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .gas-box-a {
+      background: #f1f5f9;
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 0.8125rem;
+      color: #475569;
+      line-height: 1.45;
+    }
+    .gas-box-a .a-label {
+      font-weight: 600;
+      color: var(--primary);
+      margin-right: 4px;
+    }
+    @media (max-width: 768px) {
+      .gas-row { flex-direction: column; }
+      .gas-bar { writing-mode: horizontal-tb; min-width: auto; padding: 8px 16px; }
+      .gas-row-content { flex-direction: column; }
+    }
+
+    /* ── Personal Tasks ── */
+    .tasks-title {
+      max-width: 1200px;
+      margin: 0 auto 24px;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .tasks-list {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .task-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: 40px 1fr 1fr;
+      gap: 16px;
+      align-items: start;
+      transition: box-shadow 0.2s;
+    }
+    .task-item:hover { box-shadow: var(--shadow-sm); }
+    .task-num {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1;
+      padding-top: 2px;
+    }
+    .task-content h4 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 4px;
+      font-family: var(--font-heading);
+    }
+    .task-content p {
+      font-size: 0.8125rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .task-value p {
+      font-size: 0.8125rem;
+      color: #475569;
+      line-height: 1.45;
+    }
+    .task-value-label {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    /* ── New Business Section ── */
+    .newbiz-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-card);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .newbiz-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+    }
+    .newbiz-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--fg);
+    }
+    .newbiz-item {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .newbiz-item:last-child { border-bottom: none; }
+    .newbiz-item-name {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 4px;
+    }
+    .newbiz-item-desc {
+      font-size: 0.8125rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .newbiz-item-need {
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* ── Footer ── */
+    footer[data-component="Footer"] {
+      background: #0c1f3f;
+      padding: 40px var(--space-content);
+      text-align: center;
+    }
+    .footer-brand {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: -0.01em;
+    }
+    .footer-year {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.4);
+      margin-top: 8px;
+    }
+
+    /* ── Scroll Animation ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .plan-goals { grid-template-columns: 1fr; }
+      .problems-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      :root { --space-section: 56px; }
+      .nav-links { display: none; }
+      .hero-stats { gap: 24px; }
+      .unfinished-item { grid-template-columns: 1fr; }
+      .task-item { grid-template-columns: 32px 1fr; }
+      .task-value { grid-column: 1 / -1; }
+      .wuxin-grid { grid-template-columns: 1fr; }
+      .newbiz-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav data-component="Navigation" data-od-id="nav">
+    <div class="nav-inner">
+      <div class="nav-brand-group">
+        <img class="nav-logo" src="uploads/image_1782978267528_rbqfkxb.png" alt="瀛之杰" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="#wuxin">五新成果</a></li>
+        <li><a href="#innovate">创新/固化</a></li>
+        <li><a href="#unfinished">未达成事项</a></li>
+        <li><a href="#problems">待解决问题</a></li>
+        <li><a href="#plan">下半年计划</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+  <!-- Hero -->
+  <section class="hero" data-component="Hero" data-od-id="hero">
+    <div class="hero-content">
+      <h1>2026年上半年度<br />工作总结</h1>
+      <div class="hero-divider"></div>
+      <p class="hero-author">汇报人：<strong>May</strong></p>
+      <p class="hero-date">2026.7.3</p>
+    </div>
+  </section>
+
+  <!-- 五新工作内容 -->
+  <section class="wuxin-section section-full" id="wuxin" data-component="Wuxin Results" data-od-id="wuxin">
+    <div class="section-header" style="max-width:1200px;margin:0 auto 48px;">
+      <p class="section-label reveal">Performance Review</p>
+      <h2 class="reveal">"五新"成果回顾</h2>
+      <p class="reveal">上半年在业务、客户、收入、产品和团队五个维度的核心成果</p>
+    </div>
+    <div class="wuxin-grid">
+      <!-- 新业务 -->
+      <div class="wuxin-card reveal" data-component="New Business Card" data-od-id="wuxin-business">
+        <div class="wuxin-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3>新业务</h3>
+        <p class="wuxin-card-subtitle">投标与中标情况</p>
+        <div class="wuxin-highlight">3<span style="font-size:0.5em;font-weight:400;color:var(--muted)"> 次中标</span></div>
+        <p class="wuxin-highlight-label">主导2次 · 参与3次 · 讲标1次</p>
+        <div class="wuxin-metric">
+          <span class="wuxin-metric-label">参与投标</span>
+          <span class="wuxin-metric-value">4 次</span>
+        </div>
+        <div class="wuxin-metric">
+          <span class="wuxin-metric-label">代表项目</span>
+          <span class="wuxin-metric-value">奇瑞客户体验</span>
+        </div>
+        <div class="wuxin-metric">
+          <span class="wuxin-metric-label">代表项目</span>
+          <span class="wuxin-metric-value">启境岗位培训</span>
+        </div>
+      </div>
+
+      <!-- 新客户 -->
+      <div class="wuxin-card reveal" data-component="New Customer Card" data-od-id="wuxin-customer">
+        <div class="wuxin-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>新客户</h3>
+        <p class="wuxin-card-subtitle">新客户开发进展</p>
+        <div class="wuxin-highlight">1<span style="font-size:0.5em;font-weight:400;color:var(--muted)"> 个商机</span></div>
+        <p class="wuxin-highlight-label">已报价/立项：0个</p>
+        <div class="wuxin-metric">
+          <span class="wuxin-metric-label">关键客户</span>
+          <span class="wuxin-metric-value">昊铂埃安</span>
+        </div>
+        <div class="wuxin-metric">
+          <span class="wuxin-metric-label">转化阶段</span>
+          <span class="wuxin-metric-value">线索 / 方案</span>
+        </div>
+        <div class="wuxin-metric">
+          <span class="wuxin-metric-label">下一步</span>
+          <span class="wuxin-metric-value">变革项目立项</span>
+        </div>
+      </div>
+
+      <!-- 新收入 -->
+      <div class="wuxin-card reveal" data-component="New Revenue Card" data-od-id="wuxin-revenue">
+        <div class="wuxin-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3>新收入</h3>
+        <p class="wuxin-card-subtitle">项目收入达成</p>
+        <div class="wuxin-highlight">120<span style="font-size:0.5em;font-weight:400;color:var(--muted)"> 万</span></div>
+        <p class="wuxin-highlight-label">个人管理项目：2个</p>
+        <div class="wuxin-metric">
+          <span class="wuxin-metric-label">团队支持项目</span>
+          <span class="wuxin-metric-value">11 个</span>
+        </div>
+        <div class="wuxin-metric">
+          <span class="wuxin-metric-label">个人支持其他</span>
+          <span class="wuxin-metric-value">3 个项目</span>
+        </div>
+      </div>
+
+      <!-- 新产品 -->
+      <div class="wuxin-card reveal" data-component="New Product Card" data-od-id="wuxin-product">
+        <div class="wuxin-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <h3>新产品</h3>
+        <p class="wuxin-card-subtitle">产品化工具与方法固化</p>
+        <div class="wuxin-highlight">3<span style="font-size:0.5em;font-weight:400;color:var(--muted)"> 个固化</span></div>
+        <p class="wuxin-highlight-label">产品/工具/方法</p>
+        <div class="wuxin-metric">
+          <span class="wuxin-metric-label">项目案例固化</span>
+          <span class="wuxin-metric-value">1 个</span>
+        </div>
+        <div class="wuxin-metric">
+          <span class="wuxin-metric-label">可复用模板</span>
+          <span class="wuxin-metric-value">3 个</span>
+        </div>
+        <span class="wuxin-tag">AI智能问策优化中</span>
+      </div>
+
+      <!-- 新员工 -->
+      <div class="wuxin-card reveal" data-component="New Employee Card" data-od-id="wuxin-employee">
+        <div class="wuxin-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>新员工</h3>
+        <p class="wuxin-card-subtitle">团队建设与人才培养</p>
+        <div class="wuxin-highlight">3<span style="font-size:0.5em;font-weight:400;color:var(--muted)"> 位潜力员工</span></div>
+        <p class="wuxin-highlight-label">组织内训：1次</p>
+        <div class="wuxin-metric">
+          <span class="wuxin-metric-label">关键岗位补强</span>
+          <span class="wuxin-metric-value">2 个产品开发</span>
+        </div>
+        <div class="wuxin-metric">
+          <span class="wuxin-metric-label">不合格淘汰</span>
+          <span class="wuxin-metric-value">0 人</span>
+        </div>
+        <span class="wuxin-tag">需补充年轻项目经理</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 创新/固化成果 -->
+  <section class="innovate-section section-full" id="innovate" data-component="Innovation Results" data-od-id="innovate">
+    <div class="section-header" style="max-width:1200px;margin:0 auto 48px;">
+      <p class="section-label reveal">Innovation & Standardization</p>
+      <h2 class="reveal">创新/固化的案例/工具/方法</h2>
+      <p class="reveal">上半年沉淀的关键创新成果及其业务价值</p>
+    </div>
+    <div class="innovate-list">
+      <div class="innovate-card reveal" data-component="Innovation Card" data-od-id="innovate-1">
+        <div class="innovate-num">1</div>
+        <div class="innovate-body">
+          <p class="innovate-name">岗位培训运营管理全景图</p>
+          <div class="innovate-meta">
+            <div class="innovate-meta-item">
+              <span class="innovate-meta-label">应用场景及功能</span>
+              <span class="innovate-meta-text">岗位培训项目管理对培训前、中、后关键业务及运营工作进行梳理</span>
+            </div>
+            <div class="innovate-meta-item">
+              <span class="innovate-meta-label">业务价值</span>
+              <span class="innovate-meta-text">后续岗位培训项目及运营管理模版</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+            <span style="font-size:0.7rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:2px;">相关文件</span>
+            <a href="file:///Users/may/Desktop/Qoder/%E5%B7%A5%E4%BD%9C%E6%80%BB%E7%BB%93%E5%8F%8A%E8%AE%A1%E5%88%92/%E9%94%80%E5%94%AE%E7%BB%8F%E7%90%86%E5%BA%97%E9%95%BF%E5%9F%B9%E8%AE%AD%E8%AE%A1%E5%88%92-0315.pptx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:0.8125rem;color:var(--primary);text-decoration:none;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);transition:border-color 0.2s,background 0.2s;width:fit-content;" onmouseover="this.style.borderColor='var(--primary)';this.style.background='var(--primary-light)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              培训计划-0315
+            </a>
+            <a href="file:///Users/may/Desktop/Qoder/%E5%B7%A5%E4%BD%9C%E6%80%BB%E7%BB%93%E5%8F%8A%E8%AE%A1%E5%88%92/%E9%94%80%E5%94%AE%E7%BB%8F%E7%90%86%E5%BA%97%E9%95%BF%E5%9F%B9%E8%AE%AD%E8%AE%A1%E5%88%92-%E7%89%A9%E6%96%99%E8%AE%BE%E8%AE%A10315.pptx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:0.8125rem;color:var(--primary);text-decoration:none;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);transition:border-color 0.2s,background 0.2s;width:fit-content;" onmouseover="this.style.borderColor='var(--primary)';this.style.background='var(--primary-light)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              培训计划-物料设计
+            </a>
+            <a href="file:///Users/may/Desktop/Qoder/%E5%B7%A5%E4%BD%9C%E6%80%BB%E7%BB%93%E5%8F%8A%E8%AE%A1%E5%88%92/%E9%94%80%E5%94%AE%E7%BB%8F%E7%90%86%E5%BA%97%E9%95%BF%E5%9F%B9%E8%AE%AD%E8%AE%A1%E5%88%92-%E8%BF%90%E8%90%A5%E6%89%A7%E8%A1%8C%2020260320.pptx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:0.8125rem;color:var(--primary);text-decoration:none;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);transition:border-color 0.2s,background 0.2s;width:fit-content;" onmouseover="this.style.borderColor='var(--primary)';this.style.background='var(--primary-light)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              培训计划-运营执行
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="innovate-card reveal" data-component="Innovation Card" data-od-id="innovate-2">
+        <div class="innovate-num">2</div>
+        <div class="innovate-body">
+          <p class="innovate-name">业绩提升AI诊断及策略工具</p>
+          <div class="innovate-meta">
+            <div class="innovate-meta-item">
+              <span class="innovate-meta-label">应用场景及功能</span>
+              <span class="innovate-meta-text">根据业务课题，自动生成问题根因及策略方案</span>
+            </div>
+            <div class="innovate-meta-item">
+              <span class="innovate-meta-label">业务价值</span>
+              <span class="innovate-meta-text">经销商自我诊断及专家教练策略输出提效</span>
+            </div>
+          </div>
+          <a href="https://report.aiyimaiche.com/#/aichat" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:0.8125rem;font-weight:500;color:var(--primary);text-decoration:none;padding:6px 14px;border:1px solid var(--primary);border-radius:50px;margin-top:4px;transition:background 0.2s,color 0.2s;width:fit-content;" onmouseover="this.style.background='var(--primary)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='var(--primary)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            进入工具
+          </a>
+        </div>
+      </div>
+      <div class="innovate-card reveal" data-component="Innovation Card" data-od-id="innovate-3">
+        <div class="innovate-num">3</div>
+        <div class="innovate-body">
+          <p class="innovate-name">IPM运营管理系统迭代优化</p>
+          <div class="innovate-meta">
+            <div class="innovate-meta-item">
+              <span class="innovate-meta-label">应用场景及功能</span>
+              <span class="innovate-meta-text">赋能项目开发天管理，所有管理数据线上化</span>
+            </div>
+            <div class="innovate-meta-item">
+              <span class="innovate-meta-label">业务价值</span>
+              <span class="innovate-meta-text">提升绩效数据统计效率</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 未达成事项 -->
+  <section class="section" id="unfinished" data-component="Unfinished Items" data-od-id="unfinished">
+    <div class="section-header">
+      <p class="section-label reveal">Pending Items</p>
+      <h2 class="reveal">规划未完成工作</h2>
+      <p class="reveal">上半年计划中尚未达成的事项及后续推进方案</p>
+    </div>
+    <div class="unfinished-list">
+      <div class="unfinished-item reveal" data-component="Unfinished Item" data-od-id="unfinished-1">
+        <div class="unfinished-col">
+          <p class="unfinished-col-label">未完成工作项</p>
+          <p class="unfinished-col-value">AI智能问策产品交付</p>
+          <span class="unfinished-status status-progress">阶段性成果</span>
+        </div>
+        <div class="unfinished-col">
+          <p class="unfinished-col-label">现状说明</p>
+          <p class="unfinished-col-value">有阶段性成果，对于方案产出需要测试优化</p>
+        </div>
+        <div class="unfinished-col">
+          <p class="unfinished-col-label">后续计划</p>
+          <p class="unfinished-col-value">基于SVW业绩提升项目入店成果进行优化</p>
+        </div>
+      </div>
+      <div class="unfinished-item reveal" data-component="Unfinished Item" data-od-id="unfinished-2">
+        <div class="unfinished-col">
+          <p class="unfinished-col-label">未完成工作项</p>
+          <p class="unfinished-col-value">AI智能产品话术产品</p>
+          <span class="unfinished-status status-progress">待重新定位</span>
+        </div>
+        <div class="unfinished-col">
+          <p class="unfinished-col-label">现状说明</p>
+          <p class="unfinished-col-value">现有产品多轮测试后还尚不能替代大模型产品</p>
+        </div>
+        <div class="unfinished-col">
+          <p class="unfinished-col-label">后续计划</p>
+          <p class="unfinished-col-value">重新在新产品上市项目中挖掘新的业务场景</p>
+        </div>
+      </div>
+      <div class="unfinished-item reveal" data-component="Unfinished Item" data-od-id="unfinished-3">
+        <div class="unfinished-col">
+          <p class="unfinished-col-label">未完成工作项</p>
+          <p class="unfinished-col-value">运营投标合同整理</p>
+          <span class="unfinished-status status-progress">初级版完成</span>
+        </div>
+        <div class="unfinished-col">
+          <p class="unfinished-col-label">现状说明</p>
+          <p class="unfinished-col-value">有方向及初级版，缺少有能力和时间的运营人员执行</p>
+        </div>
+        <div class="unfinished-col">
+          <p class="unfinished-col-label">后续计划</p>
+          <p class="unfinished-col-value">暂计划安排Suki时间允许时进行整理</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 需要解决的问题 -->
+  <section class="problems-section section-full" id="problems" data-component="Problem Cards" data-od-id="problems">
+    <div class="section-header" style="max-width:1200px;margin:0 auto 48px;">
+      <p class="section-label reveal">Key Issues</p>
+      <h2 class="reveal">复盘反思及待解决问题</h2>
+      <p class="reveal">本团队及跨部门协作中识别的关键问题与改进建议</p>
+    </div>
+    <div class="problems-grid">
+      <!-- 问题1 -->
+      <div class="problem-card reveal" data-component="Problem Card" data-od-id="problem-1">
+        <div class="problem-header">
+          <div>
+            <p class="problem-number">Issue 01</p>
+            <p class="problem-title">中层项目经理业务储备不足</p>
+          </div>
+          <span class="problem-status-tag tag-partial">部分解决</span>
+        </div>
+        <div class="problem-detail">
+          <div class="problem-detail-row">
+            <span class="problem-detail-label">表现</span>
+            <span class="problem-detail-text">项目管理停留在客户沟通表面，不能深入业务层</span>
+          </div>
+          <div class="problem-detail-row">
+            <span class="problem-detail-label">影响</span>
+            <span class="problem-detail-text">项目统筹安排和业务管理时，无法基于业务目标进行深度及周全考虑</span>
+          </div>
+        </div>
+        <div class="problem-suggestion">
+          <strong>建议：</strong>项目经理（含商务方面）除管理沟通外，需要参与项目开发，增加业务层理解力
+        </div>
+      </div>
+
+      <!-- 问题2 -->
+      <div class="problem-card reveal" data-component="Problem Card" data-od-id="problem-2">
+        <div class="problem-header">
+          <div>
+            <p class="problem-number">Issue 02</p>
+            <p class="problem-title">中大型项目统筹管理规范不足</p>
+          </div>
+          <span class="problem-status-tag tag-forming">方案形成中</span>
+        </div>
+        <div class="problem-detail">
+          <div class="problem-detail-row">
+            <span class="problem-detail-label">表现</span>
+            <span class="problem-detail-text">300万以上项目管理分工、职责、内部协作缺少规范</span>
+          </div>
+          <div class="problem-detail-row">
+            <span class="problem-detail-label">影响</span>
+            <span class="problem-detail-text">项目管理过程易出现职责空白、协同低效、目标缺失等问题</span>
+          </div>
+        </div>
+        <div class="problem-suggestion">
+          <strong>建议：</strong>已形成项目启动后管理责任备忘录模版，持续推进制度化
+        </div>
+        <a href="file:///Users/may/Documents/1.%202026%20%E9%A1%B9%E7%9B%AE%E6%96%87%E4%BB%B6/3.%20%E4%BC%A0%E7%A5%BA%E5%90%AF%E9%95%9C%E5%B2%97%E4%BD%8D%E5%9F%B9%E8%AE%AD/3.%20%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E8%A7%84%E8%8C%83%E5%A4%87%E5%BF%98%E5%BD%95-%E5%90%AF%E9%95%9C%E5%B2%97%E4%BD%8D%E5%9F%B9%E8%AE%AD.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;font-size:0.8125rem;font-weight:500;color:var(--primary);text-decoration:none;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);transition:border-color 0.2s,background 0.2s;width:fit-content;margin-top:4px;" onmouseover="this.style.borderColor='var(--primary)';this.style.background='var(--primary-light)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          项目管理规范备忘录-启镜岗位培训.pdf
+        </a>
+      </div>
+
+      <!-- 问题3 -->
+      <div class="problem-card reveal" data-component="Problem Card" data-od-id="problem-3">
+        <div class="problem-header">
+          <div>
+            <p class="problem-number">Issue 03</p>
+            <p class="problem-title">运营团队内部协同不足</p>
+          </div>
+          <span class="problem-status-tag tag-ongoing">持续解决中</span>
+        </div>
+        <div class="problem-detail">
+          <div class="problem-detail-row">
+            <span class="problem-detail-label">表现</span>
+            <span class="problem-detail-text">小团队管理模式持久，内部沟通支持不畅</span>
+          </div>
+          <div class="problem-detail-row">
+            <span class="problem-detail-label">影响</span>
+            <span class="problem-detail-text">无法实现资源共享，沟通效率低</span>
+          </div>
+        </div>
+        <div class="problem-suggestion">
+          <strong>建议：</strong>目前已打破强双人绑定模式，根据项目协调支持
+        </div>
+      </div>
+
+      <!-- 问题4 -->
+      <div class="problem-card reveal" data-component="Problem Card" data-od-id="problem-4">
+        <div class="problem-header">
+          <div>
+            <p class="problem-number">Issue 04</p>
+            <p class="problem-title">招标运营工作效率不高</p>
+          </div>
+          <span class="problem-status-tag tag-no">未解决</span>
+        </div>
+        <div class="problem-detail">
+          <div class="problem-detail-row">
+            <span class="problem-detail-label">表现</span>
+            <span class="problem-detail-text">招标商务准备部分重复做，大量招投标工作效率低</span>
+          </div>
+          <div class="problem-detail-row">
+            <span class="problem-detail-label">影响</span>
+            <span class="problem-detail-text">大量招投标工作，效率低</span>
+          </div>
+        </div>
+        <div class="problem-suggestion">
+          <strong>建议：</strong>招投标部分工作，如合同、简历等资料准备建立可选择及复用模式
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 下半年计划 -->
+  <section class="section" id="plan" data-component="H2 Plan" data-od-id="plan">
+    <div class="section-header">
+      <p class="section-label reveal">Second Half 2026</p>
+      <h2 class="reveal">下半年工作目标与计划</h2>
+      <p class="reveal">三大核心目标（GAS框架）及个人主要工作任务</p>
+    </div>
+
+    <!-- 三大目标概览 -->
+    <div class="goal-overview reveal" data-component="Goal Overview" data-od-id="goal-overview">
+      <div class="goal-overview-item">
+        <div class="goal-overview-num">01</div>
+        <p class="goal-overview-text">公司行业解决方案及方法论沉淀</p>
+        <p class="goal-overview-sub">行业解决方案梳理 · 方法论提炼 · 案例采集</p>
+      </div>
+      <div class="goal-overview-item">
+        <div class="goal-overview-num">02</div>
+        <p class="goal-overview-text">项目案例整理及传播性输出支持</p>
+        <p class="goal-overview-sub">案例包装 · 传播物料 · 知识库建设</p>
+      </div>
+      <div class="goal-overview-item">
+        <div class="goal-overview-num">03</div>
+        <p class="goal-overview-text">优化解决方案输出流程和效率</p>
+        <p class="goal-overview-sub">流程标准化 · 工具链优化 · 效率提升</p>
+      </div>
+    </div>
+
+    <!-- 三大核心目标 – GAS 树状结构 -->
+    <div class="goal-tree">
+      <!-- Goal 1 -->
+      <div class="goal-tree-block reveal" data-component="Goal Tree Block" data-od-id="goal-1">
+        <p class="goal-tree-title">Goal 01</p>
+        <!-- G: 成果目标 -->
+        <div class="gas-row">
+          <div class="gas-bar gas-bar-g">G：成果目标</div>
+          <div class="gas-row-content">
+            <div class="gas-box-g">公司<span class="gas-keyword">行业</span>解决方案及<span class="gas-keyword">方法论</span>沉淀</div>
+          </div>
+        </div>
+        <!-- S: 策略目标 -->
+        <div class="gas-row">
+          <div class="gas-bar gas-bar-s">S：策略目标</div>
+          <div class="gas-row-content">
+            <div class="gas-box-s"><span class="s-label">S1：</span>行业解决方案梳理</div>
+            <div class="gas-box-s"><span class="s-label">S2：</span>项目方法论提炼整理</div>
+            <div class="gas-box-s"><span class="s-label">S3：</span>赋能教练一线案例采集</div>
+          </div>
+        </div>
+        <!-- A: 行动目标 -->
+        <div class="gas-row">
+          <div class="gas-bar gas-bar-a">A：行动目标</div>
+          <div class="gas-row-content">
+            <div class="gas-col-a">
+              <div class="gas-box-a"><span class="a-label">A1：</span>各项目leader沉淀新解决方案（与项目leader沟通）</div>
+              <div class="gas-box-a"><span class="a-label">A2：</span>供投标和客户沟通的解决方案库更新</div>
+            </div>
+            <div class="gas-col-a">
+              <div class="gas-box-a"><span class="a-label">A1：</span>各项目固化方法论</div>
+              <div class="gas-box-a"><span class="a-label">A2：</span>解决方案方法论更新</div>
+            </div>
+            <div class="gas-col-a">
+              <div class="gas-box-a"><span class="a-label">A1：</span>一线案例采集模版</div>
+              <div class="gas-box-a"><span class="a-label">A2：</span>赋能教练按模版提供辅导案例</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Goal 2 -->
+      <div class="goal-tree-block reveal" data-component="Goal Tree Block" data-od-id="goal-2">
+        <p class="goal-tree-title">Goal 02</p>
+        <!-- G: 成果目标 -->
+        <div class="gas-row">
+          <div class="gas-bar gas-bar-g">G：成果目标</div>
+          <div class="gas-row-content">
+            <div class="gas-box-g">项目<span class="gas-keyword">案例</span>整理及<span class="gas-keyword">传播性</span>输出支持</div>
+          </div>
+        </div>
+        <!-- S: 策略目标 -->
+        <div class="gas-row">
+          <div class="gas-bar gas-bar-s">S：策略目标</div>
+          <div class="gas-row-content">
+            <div class="gas-box-s"><span class="s-label">S1：</span>赋能系统输出沉淀管理</div>
+            <div class="gas-box-s"><span class="s-label">S2：</span>公众号案例传播素材支持</div>
+          </div>
+        </div>
+        <!-- A: 行动目标 -->
+        <div class="gas-row">
+          <div class="gas-bar gas-bar-a">A：行动目标</div>
+          <div class="gas-row-content">
+            <div class="gas-col-a">
+              <div class="gas-box-a"><span class="a-label">A1：</span>上半年项目输出赋能系统上传情况审核</div>
+              <div class="gas-box-a"><span class="a-label">A2：</span>未按规范上传的督促完成材料上传</div>
+            </div>
+            <div class="gas-col-a">
+              <div class="gas-box-a"><span class="a-label">A1：</span>上半年可输出传播案例任务布置</div>
+              <div class="gas-box-a"><span class="a-label">A2：</span>输出最佳案例传播稿</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Goal 3 -->
+      <div class="goal-tree-block reveal" data-component="Goal Tree Block" data-od-id="goal-3">
+        <p class="goal-tree-title">Goal 03</p>
+        <!-- G: 成果目标 -->
+        <div class="gas-row">
+          <div class="gas-bar gas-bar-g">G：成果目标</div>
+          <div class="gas-row-content">
+            <div class="gas-box-g">优化解决方案<span class="gas-keyword">输出流程</span>和<span class="gas-keyword">效率</span></div>
+          </div>
+        </div>
+        <!-- S: 策略目标 -->
+        <div class="gas-row">
+          <div class="gas-bar gas-bar-s">S：策略目标</div>
+          <div class="gas-row-content">
+            <div class="gas-box-s"><span class="s-label">S1：</span>拆解工作流，引用AI技术赋能，提升工作效率</div>
+            <div class="gas-box-s"><span class="s-label">S2：</span>固化项目管理流程及工具，降低时间损耗</div>
+            <div class="gas-box-s"><span class="s-label">S3：</span>内部定期交流分享机制</div>
+          </div>
+        </div>
+        <!-- A: 行动目标 -->
+        <div class="gas-row">
+          <div class="gas-bar gas-bar-a">A：行动目标</div>
+          <div class="gas-row-content">
+            <div class="gas-col-a">
+              <div class="gas-box-a"><span class="a-label">A1：</span>培训赋能类项目AI场景化 — 智能问策产品</div>
+              <div class="gas-box-a"><span class="a-label">A2：</span>新产品上市AI场景化 — 待挖掘新场景</div>
+            </div>
+            <div class="gas-col-a">
+              <div class="gas-box-a"><span class="a-label">A1：</span>项目工作流程优化及固化任务布置</div>
+              <div class="gas-box-a"><span class="a-label">A2：</span>形成内部管理模式及工具共享</div>
+              <div class="gas-box-a"><span class="a-label">A3：</span>后台项目支持AI研究报告类</div>
+            </div>
+            <div class="gas-col-a">
+              <div class="gas-box-a"><span class="a-label">A1：</span>每月项目管理提效分享主题设置</div>
+              <div class="gas-box-a"><span class="a-label">A2：</span>每月固定时间内部分享交流</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 个人主要任务 -->
+    <h3 class="tasks-title reveal">个人主要工作任务</h3>
+    <div class="tasks-list">
+      <div class="task-item reveal" data-component="Task Item" data-od-id="task-1">
+        <span class="task-num">01</span>
+        <div class="task-content">
+          <h4>现有项目管理</h4>
+          <p>如启境、大众业绩提升等，保证交付并带领团队固化管理模式、流程及工具</p>
+        </div>
+        <div class="task-value">
+          <p class="task-value-label">价值创造</p>
+          <p>保证项目及时交付及收款，固化可复用模式</p>
+        </div>
+      </div>
+      <div class="task-item reveal" data-component="Task Item" data-od-id="task-2">
+        <span class="task-num">02</span>
+        <div class="task-content">
+          <h4>新项目管理及开发</h4>
+          <p>含下半年招投标支持，项目招投标方案及执行方案</p>
+        </div>
+        <div class="task-value">
+          <p class="task-value-label">价值创造</p>
+          <p>增加项目收入</p>
+        </div>
+      </div>
+      <div class="task-item reveal" data-component="Task Item" data-od-id="task-3">
+        <span class="task-num">03</span>
+        <div class="task-content">
+          <h4>新AI化产品推进</h4>
+          <p>现有AI产品持续推进，新业务场景AI产品需求及设计</p>
+        </div>
+        <div class="task-value">
+          <p class="task-value-label">价值创造</p>
+          <p>内部提效，外部增加公司业务竞争力</p>
+        </div>
+      </div>
+      <div class="task-item reveal" data-component="Task Item" data-od-id="task-4">
+        <span class="task-num">04</span>
+        <div class="task-content">
+          <h4>项目运营管理</h4>
+          <p>项目运营团队的日常工作协调、产品化及绩效管理</p>
+        </div>
+        <div class="task-value">
+          <p class="task-value-label">价值创造</p>
+          <p>项目运营管理不断规范化和效率化</p>
+        </div>
+      </div>
+      <div class="task-item reveal" data-component="Task Item" data-od-id="task-5">
+        <span class="task-num">05</span>
+        <div class="task-content">
+          <h4>人员招聘与培养</h4>
+          <p>高端人员招聘面试及现有人员管理培养，具有潜力的可发展人员引进</p>
+        </div>
+        <div class="task-value">
+          <p class="task-value-label">价值创造</p>
+          <p>提升公司人员作战竞争力</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新业务机会 -->
+    <div style="margin-top:56px;">
+      <h3 class="tasks-title reveal">客户新业务及内部价值创造机会</h3>
+      <div class="newbiz-grid">
+        <div class="newbiz-card reveal" data-component="New Biz External" data-od-id="newbiz-ext">
+          <h3>外部客户新业务</h3>
+          <div class="newbiz-item">
+            <p class="newbiz-item-name">昊铂埃安变革项目</p>
+            <p class="newbiz-item-desc">能成功立项启动变革项目</p>
+            <p class="newbiz-item-need">需要：高端解决方案人员及年轻化项目管理者</p>
+          </div>
+        </div>
+        <div class="newbiz-card reveal" data-component="New Biz Internal" data-od-id="newbiz-int">
+          <h3>内部产品/服务价值创造</h3>
+          <div class="newbiz-item">
+            <p class="newbiz-item-name">AI智能问策经营诊断类产品</p>
+            <p class="newbiz-item-desc">将大众业绩提升项目沉淀的业务诊断方案通过AI大模型实现产品化赋能</p>
+            <p class="newbiz-item-need">需要：技术开发支持</p>
+          </div>
+          <div class="newbiz-item">
+            <p class="newbiz-item-name">项目投标内部管理产品</p>
+            <p class="newbiz-item-desc">将以往投标素材作为AI大模型库，自动化生成投标资质文件</p>
+            <p class="newbiz-item-need">需要：有结构化思考和数字化产品思维运营人员</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer data-component="Footer" data-od-id="footer">
+    <p class="footer-brand">瀛之杰 · 2026年半年度工作总结 · May</p>
+    <p class="footer-year">2026 YingZhiJie. All rights reserved.</p>
+  </footer>
+
+  <script>
+    /* ── Navigation Scroll Effect ── */
+    const nav = document.querySelector('nav[data-component="Navigation"]');
+    const onScroll = () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    /* ── Active Nav Link ── */
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const updateActive = () => {
+      const scrollY = window.scrollY + 120;
+      sections.forEach(sec => {
+        const top = sec.offsetTop;
+        const h = sec.offsetHeight;
+        const id = sec.getAttribute('id');
+        const link = document.querySelector(`.nav-links a[href="#${id}"]`);
+        if (link) {
+          link.classList.toggle('active', scrollY >= top && scrollY < top + h);
+        }
+      });
+    };
+    window.addEventListener('scroll', updateActive, { passive: true });
+
+    /* ── Scroll Reveal ── */
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
