@@ -155,7 +155,7 @@
       align-items: center;
       text-align: center;
       padding: 100px var(--space-content) 60px;
-      background: linear-gradient(180deg, #0c1f3f 0%, #132e5b 40%, #1a4080 100%);
+      background: url('uploads/hero-bg.jpg') center center / cover no-repeat;
       position: relative;
       overflow: hidden;
     }
@@ -163,10 +163,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
+      background: rgba(12, 31, 63, 0.55);
       pointer-events: none;
     }
     .hero::after {
